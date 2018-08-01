@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 class CactbotLanguageEn extends CactbotLanguage {
   constructor(playerName) {
@@ -6,14 +6,6 @@ class CactbotLanguageEn extends CactbotLanguage {
   }
 
   InitStrings(playerName) {
-    this.kZone = Object.freeze({
-      O1S: /Deltascape V1\.0 \(Savage\)/,
-      O2S: /Deltascape V2\.0 \(Savage\)/,
-      O3S: /Deltascape V3\.0 \(Savage\)/,
-      O4S: /Deltascape V4\.0 \(Savage\)/,
-      UCU: /The Unending Coil Of Bahamut \(Ultimate\)/,
-    });
-
     this.kEffect = Object.freeze({
       BluntResistDown: 'Blunt Resistance Down', // 0x23d, 0x335, 0x3a3
       VerstoneReady: 'Verstone Ready', // 0x4d3
@@ -36,13 +28,16 @@ class CactbotLanguageEn extends CactbotLanguage {
       Brotherhood: 'Brotherhood', // 0x49e
       Devotion: 'Devotion', // 0x4bd
       FoeRequiem: 'Foe Requiem', // up 0x8b, down 0x8c
-      
+
       // TODO: add ids
       Petrification: 'Petrification',
       BeyondDeath: 'Beyond Death',
       Burns: 'Burns',
       Sludge: 'Sludge',
       Doom: 'Doom',
+
+      // UWU
+      Windburn: 'Windburn',
     });
 
     this.kUIStrings = Object.freeze({
@@ -68,11 +63,6 @@ class CactbotLanguageEn extends CactbotLanguage {
   }
 }
 
-document.addEventListener("onPlayerChangedEvent", function (e) {
-  if (Options && Options.Language == 'en') {
-    if (!gLang)
-      gLang = new CactbotLanguageEn();
-    if (gLang.playerName != e.detail.name)
-      gLang.OnPlayerNameChange(e.detail.name);
-  }
+UserConfig.registerLanguage('en', function() {
+  gLang = new CactbotLanguageEn();
 });

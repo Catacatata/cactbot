@@ -1,6 +1,6 @@
-"use strict";
+'use strict';
 
-var gLang = null;
+let gLang = null;
 
 class CactbotLanguage {
   constructor(lang) {
@@ -75,6 +75,9 @@ class CactbotLanguage {
       BloodPrice: 'E2F',
       TheBlackestNight: '1CE1',
       Delirium: '1CDE',
+      Combust2: 'E18',
+      AspectedBenefic: 'E0B',
+      AspectedHelios: 'E11',
 
       // Susano Ex
       ChurningDeep: '203F',
@@ -100,6 +103,51 @@ class CactbotLanguage {
       WingsOfSalvation: '26CA',
       ChainLightning: '26C8',
       ThermionicBurst: '26B9',
+      Exaflare: '26EF',
+
+      // Byakko Ex
+      ByaSweepTheLeg: '27DB',
+      ByaFireAndLightning: '27DE',
+      ByaDistantClap: '27DD',
+      ByaAratama: '27F6', // Popping Unrelenting Anguish bubbles
+      ByaVacuumClaw: '27E9', // Stepping in growing orb
+      ByaImperialGuard: '27F1', // Midphase line attack
+      ByaOminousWind: '27EC', // Pink bubble collision
+      ByaHundredfoldHavoc1: '27E5', // Lightning Puddles
+      ByaHundredfoldHavoc2: '27E6', // Lightning Puddles
+
+      // o7s
+      MissileExplosion: '2782',
+      UltrosStoneskin: '2AB5',
+      TheHeat: '2777',
+      ChainCannon: '278F',
+
+      // uwu
+      GreatWhirlwind: '2B41',
+      SearingWind: '2B5C',
+      Slipstream: '2B53',
+      WickedWheel: '2B4E',
+      WickedTornado: '2B4F',
+      Eruption: '2B5A',
+      WeightOfTheLand: '2B65',
+      Landslide1: '2B70',
+      Landslide2: '2B71',
+    });
+
+    this.kZone = Object.freeze({
+      O1S: /Deltascape V1\.0 \(Savage\)/,
+      O2S: /Deltascape V2\.0 \(Savage\)/,
+      O3S: /Deltascape V3\.0 \(Savage\)/,
+      O4S: /Deltascape V4\.0 \(Savage\)/,
+      UCU: /The Unending Coil Of Bahamut \(Ultimate\)/,
+      O5S: /Sigmascape V1\.0 \(Savage\)/,
+      O6S: /Sigmascape V2\.0 \(Savage\)/,
+      O7S: /Sigmascape V3\.0 \(Savage\)/,
+      O8S: /Sigmascape V4\.0 \(Savage\)/,
+      PvpSeize: /Seal Rock \(Seize\)/,
+      PvpSecure: /The Borderland Ruins \(Secure\)/,
+      PvpShatter: /The Fields Of Glory \(Shatter\)/,
+      EurekaAnemos: /Eureka Anemos/,
     });
   }
 
@@ -115,7 +163,8 @@ class CactbotLanguage {
   // Due to this bug: https://github.com/ravahn/FFXIV_ACT_Plugin/issues/100
   // We can not look for log messages from FFXIV "You use X" here. Instead we
   // look for the actual ability usage provided by the XIV plugin.
-  // Also, the networked parse info is given much quicker than the lines from the game.
+  // Also, the networked parse info is given much quicker than the lines
+  // from the game.
   youUseAbilityRegex(ids) {
     return Regexes.Parse(' 1[56]:\\y{ObjectId}:' + this.playerName + ':' + Regexes.AnyOf(ids) + ':');
   };
@@ -125,18 +174,18 @@ class CactbotLanguage {
   };
 
   youGainEffectRegex() {
-    var effects = [];
-    for (var i = 0; i < arguments.length; ++i) {
-      var effect = arguments[i];
+    let effects = [];
+    for (let i = 0; i < arguments.length; ++i) {
+      let effect = arguments[i];
       effects.push(effect);
     }
     return Regexes.Parse(' 1A:' + this.playerName + ' gains the effect of ' + Regexes.AnyOf(effects) + ' from .* for (\\y{Float}) Seconds\\.');
   };
 
   youLoseEffectRegex() {
-    var effects = [];
-    for (var i = 0; i < arguments.length; ++i) {
-      var effect = arguments[i];
+    let effects = [];
+    for (let i = 0; i < arguments.length; ++i) {
+      let effect = arguments[i];
       effects.push(effect);
     }
     return Regexes.Parse(' 1E:' + this.playerName + ' loses the effect of ' + Regexes.AnyOf(effects) + ' from .*\\.');
@@ -147,8 +196,8 @@ class CactbotLanguage {
       abilityId = '[^:]*';
     if (!attacker)
       attacker = '[^:]*';
-    // type:attackerId:attackerName:abilityId:abilityName:targetId:targetName:flags:
-    var r = ' 1[56]:\\y{ObjectId}:' + attacker + ':' + abilityId + ':';
+    // type:attackerId:attackerName:abilId:abilName:targetId:targetName:flags:
+    let r = ' 1[56]:\\y{ObjectId}:' + attacker + ':' + abilityId + ':';
     if (target || flags) {
       if (!target)
         target = '[^:]*';
@@ -175,3 +224,8 @@ class CactbotLanguage {
     return Regexes.Parse(' 1E:' + target + ' loses the effect of ' + effect + ' from ' + attacker + '\\.');
   };
 };
+
+document.addEventListener('onPlayerChangedEvent', (function(e) {
+  if (gLang)
+    gLang.OnPlayerNameChange(e.detail.name);
+}));

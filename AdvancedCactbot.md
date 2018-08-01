@@ -26,6 +26,13 @@ file, where **\<name\>** is the name of the UI module, such as [raidboss](ui/rai
 After making any changes to these files, pressing the "Reload overlay" button for the
 appropriate cactbot in ACT's OverlayPlugin settings will apply the changes.
 
+### User Directory
+
+The OverlayPlugin config panel has a text field for "Custom User Config Directory", which
+lets you specify where your **cactbot/user** directory.  If you don't specify one, then
+it will first try to use **../../user** relative to the overlay URL.  If that doesn't
+exist, it will then look for **../cactbot/user/** relative to the **CactbotOverlay.dll**.
+
 ### Customizing Appearance
 
 The **user/\<name\>.css** file can change positions, sizes, colors, etc. for components of
@@ -173,5 +180,5 @@ element of that type, such as `<timer-bar></timer-bar>` or `<resource-bar></reso
 The set of Javascript events that can be listened for via `document.addEventListener` is found
 in [CactbotOverlay/JSEvents.cs](CactbotOverlay/JSEvents.cs). The public fields of each event
 type will be members of the event's `detail`. See the
-[ui/test/cactbot_test.html](ui/test/cactbot_test.html) ui module for a simple example of
+[ui/test/test.html](ui/test/test.html) ui module for a simple example of
 listening to and using the Javascript events.
